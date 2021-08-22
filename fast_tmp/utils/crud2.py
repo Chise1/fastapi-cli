@@ -80,9 +80,9 @@ def create_list_route(
     model: Type[Model],
     fields: Tuple[str, ...] = (),
     computed_fields: Tuple[str, ...] = (),
-    codenames: Optional[Tuple[str, ...]] = None,
-    searchs: Optional[Tuple[str, ...]] = None,
-    filters: Optional[Tuple[str, ...]] = None,
+    codenames: Tuple[str, ...] = (),
+    searchs: Tuple[str, ...] = (),
+    filters: Tuple[str, ...] = (),
     res_pydantic_model: Optional[Type[BaseModel]] = None,
     random_str: str = "",
     allow_cycles: bool = True,
@@ -136,7 +136,7 @@ def create_list_route(
     route.get(
         path,
         dependencies=[Depends(get_user_has_perms(codenames))],
-        response_model=List[schema],
+        response_model=List[schema],  # tpye:ignore
         **kw,
     )(model_list)
 
@@ -147,9 +147,9 @@ def create_list_route_with_page(
     model: Type[Model],
     fields: Tuple[str, ...] = (),
     computed_fields: Tuple[str, ...] = (),
-    codenames: Optional[Tuple[str, ...]] = None,
-    searchs: Optional[Tuple[str, ...]] = None,
-    filters: Optional[Tuple[str, ...]] = None,
+    codenames: Tuple[str, ...] = (),
+    searchs: Tuple[str, ...] = (),
+    filters: Tuple[str, ...] = (),
     res_pydantic_model: Optional[Type[BaseModel]] = None,
     random_str: str = "",
     **kw,
@@ -215,7 +215,7 @@ def create_retrieve_route(
     model: Type[Model],
     fields: Tuple[str, ...] = (),
     computed_fields: Tuple[str, ...] = (),
-    codenames: Optional[Tuple[str, ...]] = None,
+    codenames: Tuple[str, ...] = (),
     res_pydantic_model: Optional[Type[BaseModel]] = None,
     random_str: str = "",
     **kw,
@@ -247,7 +247,7 @@ def create_delete_route(
     route: APIRouter,
     path: str,
     model: Type[Model],
-    codenames: Optional[Tuple[str, ...]] = None,
+    codenames: Tuple[str, ...] = (),
     **kw,
 ):
     """
@@ -273,8 +273,8 @@ def create_post_route(
     model: Type[Model],
     fields: Tuple[str, ...] = (),
     computed_fields: Tuple[str, ...] = (),
-    codenames: Optional[Tuple[str, ...]] = None,
-    res_pydantic_model: Optional[Type[BaseModel]] = None,
+    codenames: Tuple[str, ...] = (),
+    res_pydantic_model: Type[BaseModel] = None,
     random_str: str = "",
     **kw,
 ):
@@ -290,9 +290,9 @@ def create_post_route(
         )
 
     async def model_post(
-        info: schema,
+        info: schema,  # mypy:itnore
     ):
-        await model.create(**info.dict())
+        await model.create(**info.dict())  # mypy:itnore
 
     route.post(
         path,
@@ -308,7 +308,7 @@ def create_put_route(
     model: Type[Model],
     fields: Tuple[str, ...] = (),
     computed_fields: Tuple[str, ...] = (),
-    codenames: Optional[Tuple[str, ...]] = None,
+    codenames: Tuple[str, ...] = (),
     res_pydantic_model: Optional[Type[BaseModel]] = None,
     random_str: str = "",
     **kw,
@@ -326,9 +326,9 @@ def create_put_route(
 
     async def model_put(
         id: int,
-        info: schema,
+        info: schema,  # mypy:itnore
     ):
-        await model.filter(pk=id).update(**info.dict())
+        await model.filter(pk=id).update(**info.dict())  # mypy:itnore
 
     route.put(
         path + "/{id}",

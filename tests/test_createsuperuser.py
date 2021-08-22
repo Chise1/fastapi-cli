@@ -4,7 +4,7 @@ from tortoise.contrib.test import SimpleTestCase
 
 os.environ.setdefault("FASTAPI_SETTINGS_MODULE", "tests.settings")
 
-from fast_tmp.conf import settings
+from fast_tmp.conf import settings  # noqa: E402
 
 
 class TestCreatesuperuser(SimpleTestCase):

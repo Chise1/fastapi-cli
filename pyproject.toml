@@ -15,10 +15,10 @@ repository = "https://github.com/Chise1/fast-tmp"
 python = "^3.7"
 cookiecutter = "^1.7.2"
 typer = "^0.3.2"
+tortoise-orm = "^0.17.6"
+aerich = "^0.5.7"
 
 [tool.poetry.dev-dependencies]
-tortoise-orm = { git = "https://github.com/Chise1/tortoise-orm.git", branch ="dev-rb" }
-aerich = { git = "https://github.com/Chise1/aerich.git", branch = "rb" }
 python-dotenv = "^0.15.0"
 fastapi = "^0.63.0"
 flake8 = "*"

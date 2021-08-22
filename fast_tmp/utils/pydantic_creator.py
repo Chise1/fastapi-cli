@@ -1,4 +1,4 @@
-from typing import List, Type, cast
+from typing import Any, Dict, List, Type, cast
 
 import pydantic
 from tortoise.contrib.pydantic.base import PydanticListModel
@@ -11,7 +11,7 @@ def pydantic_offsetlimit_creator(schema: Type[pydantic.BaseModel]) -> Type[pydan
 
     lname = f"{schema.__name__}_paging"
 
-    properties = {
+    properties: Dict[str, Any] = {
         "__annotations__": {"data": List[schema], "total": int},
     }  # type: ignore
     model = cast(Type[PydanticListModel], type(lname, (PydanticListModel,), properties))

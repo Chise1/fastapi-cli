@@ -1,4 +1,4 @@
-from typing import Optional, TypeVar
+from typing import Optional, TypeVar, Union
 
 from pydantic.main import BaseModel
 
@@ -10,7 +10,7 @@ class BaseAmisModel(BaseModel):
     所有amis类的父类
     """
 
-    type: TypeEnum
+    type: Union[TypeEnum, str]
 
 
 AmisModel = TypeVar("AmisModel", bound=BaseAmisModel)

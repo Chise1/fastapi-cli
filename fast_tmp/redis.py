@@ -1,4 +1,4 @@
-from typing import Container, Optional
+from typing import Container
 
 import aioredis
 from aioredis import Redis
@@ -16,7 +16,7 @@ class AsyncRedisUtil:
         exp是指过期时间,单位是秒.
     """
 
-    r: Optional[Redis] = None
+    r: Redis = None
 
     @classmethod
     async def init(cls, host="localhost", port=6379, password=None, db=0, **kwargs):

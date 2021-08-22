@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Iterable, Optional, Union
 
 # noinspection Mypy
 from cas import CASClient
@@ -6,7 +6,7 @@ from fastapi import Cookie, Depends, FastAPI, HTTPException, status
 
 from fast_tmp.conf import settings
 from fast_tmp.depends.auth import get_current_user
-from fast_tmp.models import User
+from fast_tmp.models import Permission, User
 
 app = FastAPI()
 cas_client = CASClient(
@@ -45,8 +45,8 @@ async def get_superuser(current_user: User = Depends(get_current_active_user)):
     return current_user
 
 
-def get_user_has_perms(perms: List[Any]):
-    """
+def get_user_has_perms(perms: Iterable[Union[Permission, str]]):
+    """# type:ignore
     判定用户是否具有相关权限
     :param perms:
     :return:

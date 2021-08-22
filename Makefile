@@ -1,4 +1,4 @@
-checkfiles = fast_tmp/ tests/ conftest.py
+checkfiles = fast_tmp/ conftest.py
 black_opts = -l 100 -t py38
 py_warn = PYTHONDEVMODE=1
 test_settings = SETTINGS_MODULE=tests.settings
@@ -27,8 +27,8 @@ style: deps
 check: deps
 	black --check $(black_opts) $(checkfiles) || (echo "Please run 'make style' to auto-fix style issues" && false)
 	flake8 $(checkfiles)
-	bandit -x test -r $(checkfiles)
-	mypy $(checkfiles)
+	bandit -ll -x test -r $(checkfiles)
+	mypy --ignore-missing-imports $(checkfiles)
 
 
 test_sqlite:

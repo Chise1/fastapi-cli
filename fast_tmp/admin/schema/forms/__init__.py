@@ -13,7 +13,7 @@ class Column(BaseModel):
     用于列表等的显示
     """
 
-    type: ControlEnum = ControlEnum.text  # 把这个和schema获取的参数进行融合，保证schema获取的值可以使用
+    type: Union[ControlEnum, str] = ControlEnum.text  # 把这个和schema获取的参数进行融合，保证schema获取的值可以使用
     name: str
     label: str
 

@@ -1,4 +1,4 @@
-from typing import List, Set, Type
+from typing import Any, Dict, List, Set, Type
 
 from fastapi import APIRouter, Depends, Path, Query
 from pydantic import BaseModel
@@ -63,8 +63,8 @@ def get_fields(include_fields, exclude_fields, model, need_m2m: bool = False):
 
 
 def get_model_amis_relation_label(model: Type[Model]):
-    if hasattr(model, "Amis") and hasattr(model.Amis, "relation_label"):
-        return model.Amis.relation_label
+    if hasattr(model, "Amis") and hasattr(model.Amis, "relation_label"):  # type:ignore
+        return model.Amis.relation_label  # type:ignore
     return {}
 
 
@@ -177,7 +177,7 @@ async def update(
     data: dict = await request.json()
     fields, relation_fields_rename = exclude_reference(fields, model)
     data_value = {}
-    relation_data = {}
+    relation_data: Dict[str, Any] = {}
     relation_fields_keys = relation_fields_rename.keys()
     for k, v in data.items():
         if k in fields:
@@ -202,7 +202,7 @@ async def update(
             for field, field_type in model._meta.fields_map.items():
                 if field == k:
                     if isinstance(field_type, ManyToManyFieldInstance):
-                        field_model = model._meta.fields_map[field].related_model
+                        field_model = model._meta.fields_map[field].related_model  # type:ignore
                         await getattr(instance, k).clear(using_db=conn)  # 清理旧的多对多字段
                         await getattr(instance, k).add(
                             *await field_model.filter(pk__in=v), using_db=conn
@@ -263,7 +263,7 @@ async def create(
             for field, field_type in model._meta.fields_map.items():
                 if field == k:
                     if isinstance(field_type, ManyToManyFieldInstance):
-                        field_model = model._meta.fields_map[field].related_model
+                        field_model = model._meta.fields_map[field].related_model  # type:ignore
                         subs = await field_model.filter(pk__in=v)
                         await getattr(instance, k).add(*subs, using_db=conn)
                     break
@@ -314,7 +314,7 @@ async def get_schema(
     model: Model = Depends(get_model),
     user: User = Depends(get_user_has_perms()),
 ):
-    field_model = model._meta.fields_map[field].related_model
+    field_model = model._meta.fields_map[field].related_model  # type:ignore
     amis_c = getattr(model, "Amis", None)
     if (
         amis_c is not None
@@ -331,7 +331,7 @@ async def get_schema(
 
 
 @router.get("/{resource}/mapping")
-async def get_schema(
+async def get_schema_mapping(
     request: Request,
     field: str = Query(
         ...,
@@ -340,7 +340,7 @@ async def get_schema(
     model: Model = Depends(get_model),
     user: User = Depends(get_user_has_perms()),
 ):
-    field_model = model._meta.fields_map[field].related_model
+    field_model = model._meta.fields_map[field].related_model  # type:ignore
     amis_c = getattr(model, "Amis", None)
     if (
         amis_c is not None
@@ -365,7 +365,7 @@ async def get_backrealtion_values(
     model: Model = Depends(get_model),
     user: User = Depends(get_user_has_perms()),
 ):
-    field_model = model._meta.fields_map[field].related_model
+    field_model = model._meta.fields_map[field].related_model  # type:ignore
     # if isinstance(model._meta.fields_map[field],ManyToManyFieldInstance):
     amis_c = getattr(model, "Amis", None)
     if (

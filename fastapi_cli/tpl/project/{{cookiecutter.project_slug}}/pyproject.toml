@@ -10,8 +10,8 @@ python = "^3.7"
 fastapi = "^0.63.0"
 uvicorn = {extras = ["standard"], version = "^0.13.4"}
 python-dotenv = "^0.15.0"
-tortoise-orm = { git = "https://github.com/Chise1/tortoise-orm.git", branch ="dev-rb" }
-aerich = { git = "https://github.com/Chise1/aerich.git", branch = "rb" }
+tortoise-orm = "^0.17.6"
+aerich = "^0.5.7"
 fast-tmp = "^0.1.23"
 aerich = "^0.5.2"
 python-jose = "^3.2.0"

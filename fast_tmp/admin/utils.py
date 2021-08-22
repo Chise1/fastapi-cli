@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Tuple, Type
+from typing import Callable, Dict, List, Optional, Tuple, Type
 
 from tortoise import (
     BackwardFKRelation,
@@ -63,7 +63,10 @@ def _get_base_attr(field_type: Field, **kwargs) -> dict:
         required=field_type.required,
         mode=ItemModel.normal,
         size=FormWidgetSize.md,
-        value=field_type._get_default_value(),  # fixme:检查tortoise-orm的获取默认值
+        value=field_type.default()
+        if isinstance(field_type.default, Callable)
+        else field_type.default,
+        # fixme:注意如果参数为函数该怎么办
     )
     res.update(kwargs)
     return res
@@ -108,16 +111,19 @@ def get_columns_from_model(
         elif isinstance(field_type, (ManyToManyFieldInstance, BackwardFKRelation)):
             related_model = model._meta.fields_map[field].related_model
             cs = []
-            if hasattr(model, "Amis") and hasattr(model.Amis, "relation_label"):
-                for k, v in model.Amis.relation_label:
+            if hasattr(model, "Amis") and hasattr(model.Amis, "relation_label"):  # mypy:itnore
+                for k, v in model.Amis.relation_label:  # mypy:itnore
                     if k == field:
-                        r_f: Field = getattr(related_model._meta, model.Amis.relation_label[field])
+                        r_f: Field = getattr(
+                            related_model._meta, model.Amis.relation_label[field]
+                        )  # mypy:itnore
                         cs = [
                             Column(
                                 name=related_model._meta.pk_attr, label=related_model._meta.pk_attr
                             ),
                             Column(
-                                label=r_f.description or model.Amis.relation_label[field],
+                                label=r_f.description
+                                or model.Amis.relation_label[field],  # mypy:itnore
                                 name=model.Amis.relation_label[field],
                             ),
                         ]
@@ -144,8 +150,8 @@ def get_columns_from_model(
         elif (
             isinstance(field_type, (OneToOneFieldInstance, ForeignKeyFieldInstance))
             and hasattr(model, "Amis")
-            and hasattr(model.Amis, "relation_label")
-            and model.Amis.relation_label.get(field)
+            and hasattr(model.Amis, "relation_label")  # mypy:itnore
+            and model.Amis.relation_label.get(field)  # mypy:itnore
         ):
             res.append(
                 Mapping(

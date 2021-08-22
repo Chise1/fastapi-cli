@@ -91,3 +91,14 @@ crud一共有三个版本，目前最常用的是```utils.crud2```，crud3是类
 
 crud1是以前的版本，现在不怎么用了，0.3.0之前会删掉。
 具体的使用方法下次在写。。。
+
+### Amis配置
+```python
+# 在Model类里面增加：
+class Amis:
+    # 外键列表选择的时候显示的对应表字段值
+    relation_label = {"author": "name"}
+    name_label = {}  # 当查询了额外的字段的时候需要显示的字段的值，注意这个直接对应表头，即name:label
+    # relation_field={""}
+
+```

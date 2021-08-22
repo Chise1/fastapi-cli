@@ -1,8 +1,8 @@
 import inspect
-from typing import Callable, Optional, Tuple
+from typing import Any, Optional, Tuple
 
 
-def add_filter(func: Callable, filters: Optional[Tuple[str, ...]] = None):
+def add_filter(func: Any, filters: Optional[Tuple[str, ...]] = None):
     signature = inspect.signature(func)
     res = []
     for k, v in signature.parameters.items():
@@ -17,4 +17,6 @@ def add_filter(func: Callable, filters: Optional[Tuple[str, ...]] = None):
                 )
             )
     # noinspection Mypy,PyArgumentList
-    func.__signature__ = inspect.Signature(parameters=res, __validate_parameters__=False)
+    func.__signature__ = inspect.Signature(
+        parameters=res, __validate_parameters__=False
+    )  # type:ignore

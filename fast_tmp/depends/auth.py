@@ -1,12 +1,12 @@
 from datetime import timedelta
-from typing import Any, Optional, Tuple
+from typing import Optional, Tuple, Union
 
 from fastapi import Depends, FastAPI
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError
 
 from fast_tmp.conf import settings
-from fast_tmp.models import User
+from fast_tmp.models import Permission, User
 from fast_tmp.responses import credentials_exception, no_permission_exception
 from fast_tmp.utils.token import create_access_token, decode_access_token
 
@@ -83,7 +83,7 @@ async def get_superuser(current_user: User = Depends(get_current_active_user)):
 _depend_cache = {}
 
 
-def get_user_has_perms(perms: Optional[Tuple[Any, ...]]):
+def get_user_has_perms(perms: Tuple[Union[str, Permission], ...]):
     """
     判定用户是否具有相关权限
     """
